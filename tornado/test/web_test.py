@@ -138,6 +138,10 @@ class CookieTest(WebTestCase):
                 self.set_cookie("unicode", u("qwer"))
                 self.set_cookie("bytes", b"zxcv")
 
+                # Try setting a cookie named "max_age"
+                # to ensure that "max_age" is converted to "max-age" correctly
+                self.set_cookie("max_age", 10)
+
         class GetCookieHandler(RequestHandler):
             def get(self):
                 self.write(self.get_cookie("foo", "default"))
@@ -176,6 +180,7 @@ class CookieTest(WebTestCase):
                          ["bytes=zxcv; Path=/",
                           "str=asdf; Path=/",
                           "unicode=qwer; Path=/",
+                          "max-age=10; Path=/",
                           ])
 
     def test_get_cookie(self):
