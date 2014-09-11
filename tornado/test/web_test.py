@@ -138,10 +138,6 @@ class CookieTest(WebTestCase):
                 self.set_cookie("unicode", u("qwer"))
                 self.set_cookie("bytes", b"zxcv")
 
-                # Try setting a cookie with parameter named "max_age"
-                # to ensure that "max_age" is converted to "max-age" correctly
-                self.set_cookie("max_age_test", "test", max_age=10)
-
         class GetCookieHandler(RequestHandler):
             def get(self):
                 self.write(self.get_cookie("foo", "default"))
@@ -167,18 +163,22 @@ class CookieTest(WebTestCase):
                 # Attributes from the first call are not carried over.
                 self.set_cookie("a", "e")
 
+        class SetCookieMaxAgeHandler(RequestHandler):
+            def get(self):
+                self.set_cookie("foo", "bar", max_age=10)
+
         return [("/set", SetCookieHandler),
                 ("/get", GetCookieHandler),
                 ("/set_domain", SetCookieDomainHandler),
                 ("/special_char", SetCookieSpecialCharHandler),
                 ("/set_overwrite", SetCookieOverwriteHandler),
+                ("/set_max_age", SetCookieMaxAgeHandler),
                 ]
 
     def test_set_cookie(self):
         response = self.fetch("/set")
         self.assertEqual(sorted(response.headers.get_list("Set-Cookie")),
                          ["bytes=zxcv; Path=/",
-                          "max_age_test=test; Max-Age=10; Path=/",
                           "str=asdf; Path=/",
                           "unicode=qwer; Path=/",
                           ])
@@ -226,6 +226,12 @@ class CookieTest(WebTestCase):
         headers = response.headers.get_list("Set-Cookie")
         self.assertEqual(sorted(headers),
                          ["a=e; Path=/", "c=d; Domain=example.com; Path=/"])
+
+    def test_set_cookie_max_age(self):
+        response = self.fetch("/set_max_age")
+        headers = response.headers.get_list("Set-Cookie")
+        self.assertEqual(sorted(headers),
+                         ["max_age_test=test; Max-Age=10; Path=/"])
 
 
 class AuthRedirectRequestHandler(RequestHandler):
