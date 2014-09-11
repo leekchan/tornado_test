@@ -138,9 +138,9 @@ class CookieTest(WebTestCase):
                 self.set_cookie("unicode", u("qwer"))
                 self.set_cookie("bytes", b"zxcv")
 
-                # Try setting a cookie named "max_age"
+                # Try setting a cookie with parameter named "max_age"
                 # to ensure that "max_age" is converted to "max-age" correctly
-                self.set_cookie("max_age", "10")
+                self.set_cookie("max_age_test", "test", max_age=10)
 
         class GetCookieHandler(RequestHandler):
             def get(self):
@@ -178,7 +178,7 @@ class CookieTest(WebTestCase):
         response = self.fetch("/set")
         self.assertEqual(sorted(response.headers.get_list("Set-Cookie")),
                          ["bytes=zxcv; Path=/",
-                          "max-age=10; Path=/",
+                          "max_age_test=test; Path=/",
                           "str=asdf; Path=/",
                           "unicode=qwer; Path=/",
                           ])
