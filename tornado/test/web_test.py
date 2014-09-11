@@ -140,7 +140,7 @@ class CookieTest(WebTestCase):
 
                 # Try setting a cookie named "max_age"
                 # to ensure that "max_age" is converted to "max-age" correctly
-                self.set_cookie("max_age", 10)
+                self.set_cookie("max_age", "10")
 
         class GetCookieHandler(RequestHandler):
             def get(self):
