@@ -178,7 +178,7 @@ class CookieTest(WebTestCase):
         response = self.fetch("/set")
         self.assertEqual(sorted(response.headers.get_list("Set-Cookie")),
                          ["bytes=zxcv; Path=/",
-                          "max_age_test=test; Path=/",
+                          "max_age_test=test; Max-Age=10; Path=/",
                           "str=asdf; Path=/",
                           "unicode=qwer; Path=/",
                           ])
