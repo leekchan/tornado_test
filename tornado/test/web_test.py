@@ -231,7 +231,7 @@ class CookieTest(WebTestCase):
         response = self.fetch("/set_max_age")
         headers = response.headers.get_list("Set-Cookie")
         self.assertEqual(sorted(headers),
-                         ["'foo=bar; Max-Age=10; Path=/'"])
+                         ["foo=bar; Max-Age=10; Path=/"])
 
 
 class AuthRedirectRequestHandler(RequestHandler):
