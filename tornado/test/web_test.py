@@ -2291,7 +2291,7 @@ class XSRFTest(SimpleHandlerTestCase):
                 headers=self.cookie_headers(token))
             self.assertEqual(response.code, 200)
         self.assertEqual(len(tokens_seen), 6)
-
+ 
     def test_versioning(self):
         # Version 1 still produces distinct tokens per request.
         self.assertNotEqual(self.get_token(version=1),
