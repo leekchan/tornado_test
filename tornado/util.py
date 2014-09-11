@@ -106,7 +106,7 @@ def import_object(name):
     except AttributeError:
         raise ImportError("No module named %s" % parts[-1])
 
-
+ 
 # Fake unicode literal support:  Python 3.2 doesn't have the u'' marker for
 # literal strings, and alternative solutions like "from __future__ import
 # unicode_literals" have other problems (see PEP 414).  u() can be applied
