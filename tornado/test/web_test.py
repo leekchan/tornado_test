@@ -241,8 +241,10 @@ class CookieTest(WebTestCase):
     def test_set_cookie_expires_days(self):
         response = self.fetch("/set_expires_days")
         headers = response.headers.get_list("Set-Cookie")
+        expires = format_timestamp(datetime.datetime.utcnow() + 
+            datetime.timedelta(days=10))
         self.assertEqual(sorted(headers),
-                         ["foo=bar; Max-Age=10; Path=/"])
+                         ["foo=bar; expires=%s; Path=/" % expires])
 
 
 class AuthRedirectRequestHandler(RequestHandler):
