@@ -167,12 +167,17 @@ class CookieTest(WebTestCase):
             def get(self):
                 self.set_cookie("foo", "bar", max_age=10)
 
+        class SetCookieExpiresDaysHandler(RequestHandler):
+            def get(self):
+                self.set_cookie("foo", "bar", expires_days=10)
+
         return [("/set", SetCookieHandler),
                 ("/get", GetCookieHandler),
                 ("/set_domain", SetCookieDomainHandler),
                 ("/special_char", SetCookieSpecialCharHandler),
                 ("/set_overwrite", SetCookieOverwriteHandler),
                 ("/set_max_age", SetCookieMaxAgeHandler),
+                ("/set_expires_days", SetCookieExpiresDaysHandler),
                 ]
 
     def test_set_cookie(self):
@@ -229,6 +234,12 @@ class CookieTest(WebTestCase):
 
     def test_set_cookie_max_age(self):
         response = self.fetch("/set_max_age")
+        headers = response.headers.get_list("Set-Cookie")
+        self.assertEqual(sorted(headers),
+                         ["foo=bar; Max-Age=10; Path=/"])
+
+    def test_set_cookie_expires_days(self):
+        response = self.fetch("/set_expires_days")
         headers = response.headers.get_list("Set-Cookie")
         self.assertEqual(sorted(headers),
                          ["foo=bar; Max-Age=10; Path=/"])
