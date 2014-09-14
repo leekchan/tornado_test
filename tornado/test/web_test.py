@@ -2377,16 +2377,20 @@ class DecoratorTest(WebTestCase):
                 ]
 
     def test_removeslash(self):
-        self.http_client.fetch(self.get_url('/removeslash/'), self.stop,
-                               follow_redirects=False)
-        response = self.wait()
-        self.assertEqual(response.code, 301)
-        self.assertEqual(response.headers['Location'], '/removeslash')
+        response = self.fetch("/removeslash/")
+        self.assertEqual(response.code, 302)
+        self.assertEqual(response.headers['Location'], "/removeslash")
+
+        response = self.fetch("/removeslash/?foo=bar")
+        self.assertEqual(response.code, 302)
+        self.assertEqual(response.headers['Location'], "/removeslash?foo=bar")
 
     def test_addslash(self):
-        self.http_client.fetch(self.get_url('/addslash'), self.stop,
-                               follow_redirects=False)
-        response = self.wait()
-        self.assertEqual(response.code, 301)
-        self.assertEqual(response.headers['Location'], '/addslash/')
+        response = self.fetch("/addslash")
+        self.assertEqual(response.code, 302)
+        self.assertEqual(response.headers['Location'], "/addslash/")
+
+        response = self.fetch("/addslash?foo=bar")
+        self.assertEqual(response.code, 302)
+        self.assertEqual(response.headers['Location'], "/addslash/?foo=bar")
 
