@@ -243,9 +243,9 @@ class CookieTest(WebTestCase):
         header = response.headers.get("Set-Cookie")
         self.assertTrue(re.match(br'foo=bar; expires=(.+); Path=/', header))
 
-        expires = format_timestamp(datetime.datetime.utcnow() + 
-            datetime.timedelta(days=10))
-        header_expires = email.utils.parsedate(header[17:header.find('; Path=/')])
+        expires = datetime.datetime.utcnow() + datetime.timedelta(days=10)
+        header_expires = datetime.datetime(email.utils.parsedate(
+            header[17:header.find('; Path=/')]))
         self.assertTrue(expires - header_expires < datetime.timedelta(seconds=10))
     
 
