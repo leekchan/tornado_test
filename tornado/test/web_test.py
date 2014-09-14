@@ -2372,7 +2372,7 @@ class DecoratorTest(WebTestCase):
             def get(self):
                 pass
 
-        return [("/removeslash", RemoveSlashHandler),
+        return [("/removeslash/", RemoveSlashHandler),
                 ("/addslash", AddSlashHandler),
                 ]
 
