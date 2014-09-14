@@ -1329,14 +1329,8 @@ class AcceptLanguageHeaderTest(SimpleHandlerTestCase):
         def get(self):
             self.write("Locale : %s" % self.locale.code)
 
-        def get_user_locale(self):
-            raise NotImplementedError()
-
-        def get_current_user(self):
-            raise NotImplementedError()
-
     def test_accept_language_header(self):
-        response = self.fetch("/", headers={"Accept-Language": "ko-kr,ko;q=0.8,en-us;q=0.5,en;q=0.3"})
+        response = self.fetch("/", headers={"Accept-Language": "ko-kr"})
         self.assertEqual(response.body, b"Locale : ko_KR")
 
 
