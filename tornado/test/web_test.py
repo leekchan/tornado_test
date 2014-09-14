@@ -11,7 +11,7 @@ from tornado.template import DictLoader
 from tornado.testing import AsyncHTTPTestCase, ExpectLog, gen_test
 from tornado.test.util import unittest
 from tornado.util import u, ObjectDict, unicode_type
-from tornado.web import RequestHandler, authenticated, Application, asynchronous, url, HTTPError, StaticFileHandler, _create_signature_v1, create_signed_value, decode_signed_value, ErrorHandler, UIModule, MissingArgumentError, stream_request_body, Finish
+from tornado.web import RequestHandler, authenticated, Application, asynchronous, url, HTTPError, StaticFileHandler, _create_signature_v1, create_signed_value, decode_signed_value, ErrorHandler, UIModule, MissingArgumentError, stream_request_body, Finish, removeslash, addslash
 
 import binascii
 import contextlib
@@ -2359,7 +2359,6 @@ class FinishExceptionTest(SimpleHandlerTestCase):
         self.assertEqual(b'authentication required', response.body)
 
 
-from tornado.web import removeslash, addslash
 class DecoratorTest(WebTestCase):
     def get_handlers(self):
         class RemoveSlashHandler(RequestHandler):
