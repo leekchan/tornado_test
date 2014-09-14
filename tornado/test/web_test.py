@@ -2357,3 +2357,29 @@ class FinishExceptionTest(SimpleHandlerTestCase):
         self.assertEqual('Basic realm="something"',
                          response.headers.get('WWW-Authenticate'))
         self.assertEqual(b'authentication required', response.body)
+
+
+from tornado.web import removeslash, addslash
+class DecoratorTest(WebTestCase):
+    def get_handlers(self):
+        class RemoveSlashHandler(RequestHandler):
+            @removeslash
+            def get(self):
+                pass
+
+        class AddSlashHandler(RequestHandler):
+            @addslash
+            def get(self):
+                pass
+
+        return [("/removeslash", RemoveSlashHandler),
+                ("/addslash", AddSlashHandler),
+                ]
+
+    def test_removeslash(self):
+        self.http_client.fetch(self.get_url('/removeslash/'), self.stop,
+                               follow_redirects=False)
+        response = self.wait()
+        self.assertEqual(response.code, 302)
+        self.assertEqual(response.headers['Location'], '/removeslash')
+
