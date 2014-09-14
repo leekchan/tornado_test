@@ -241,7 +241,7 @@ class CookieTest(WebTestCase):
     def test_set_cookie_expires_days(self):
         response = self.fetch("/set_expires_days")
         header = response.headers.get("Set-Cookie")
-        self.assertTrue(re.match(br'foo=bar; expires=(.+); Path=/', header))
+        self.assertTrue(re.match('foo=bar; expires=(.+); Path=/', header))
 
         expires = datetime.datetime.utcnow() + datetime.timedelta(days=10)
         header_expires = datetime.datetime(*email.utils.parsedate(
