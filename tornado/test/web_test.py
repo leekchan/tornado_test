@@ -1324,6 +1324,17 @@ class DateHeaderTest(SimpleHandlerTestCase):
 
 
 @wsgi_safe
+class AcceptLanguageHeaderTest(SimpleHandlerTestCase):
+    class Handler(RequestHandler):
+        def get(self):
+            self.write("Locale : %s" % self.locale.code)
+
+    def test_accept_language_header(self):
+        response = self.fetch("/", headers={"Accept-Language": "ko-kr,ko;q=0.8,en-us;q=0.5,en;q=0.3"})
+        self.assertEqual(response.body, b"Locale : ko_KR")
+
+
+@wsgi_safe
 class RaiseWithReasonTest(SimpleHandlerTestCase):
     class Handler(RequestHandler):
         def get(self):
