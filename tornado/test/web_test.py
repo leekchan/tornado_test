@@ -245,7 +245,7 @@ class CookieTest(WebTestCase):
 
         expires = datetime.datetime.utcnow() + datetime.timedelta(days=10)
         header_expires = datetime.datetime(*email.utils.parsedate(
-            header[17:header.find('; Path=/')]))
+            header[17:header.find('; Path=/')])[:6])
         self.assertTrue(expires - header_expires < datetime.timedelta(seconds=10))
     
 
