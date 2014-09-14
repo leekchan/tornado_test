@@ -2383,3 +2383,10 @@ class DecoratorTest(WebTestCase):
         self.assertEqual(response.code, 302)
         self.assertEqual(response.headers['Location'], '/removeslash')
 
+    def test_addslash(self):
+        self.http_client.fetch(self.get_url('/addslash'), self.stop,
+                               follow_redirects=False)
+        response = self.wait()
+        self.assertEqual(response.code, 302)
+        self.assertEqual(response.headers['Location'], '/addslash/')
+
