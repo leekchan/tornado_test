@@ -570,4 +570,4 @@ class HTTPRequestTestCase(unittest.TestCase):
         http_date = datetime.datetime.utcnow()
         request = HTTPRequest('http://example.com', if_modified_since=http_date)
         self.assertEqual(request.headers, 
-            {'If-Modified-Since': format_timestamp(http_date)})
+            {'If-Modified-Since': format_timestamp(http_date + datetime.timedelta(days=1))})
