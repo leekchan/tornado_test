@@ -1331,6 +1331,26 @@ class RaiseWithReasonTest(SimpleHandlerTestCase):
 
 
 @wsgi_safe
+class RaiseWithLogMessageTest(SimpleHandlerTestCase):
+    class Handler(RequestHandler):
+        def get(self):
+            raise HTTPError(500, log_message="Foo")
+
+    def get_http_client(self):
+        # simple_httpclient only: curl doesn't expose the reason string
+        return SimpleAsyncHTTPClient(io_loop=self.io_loop)
+
+    def test_raise_with_rlog_message(self):
+        response = self.fetch("/")
+        self.assertEqual(response.code, 500)
+        self.assertEqual(response.log_message, "Foo")
+        self.assertIn(b'500: just check', response.body)
+
+    def test_httperror_str(self):
+        self.assertEqual(str(HTTPError(500, log_message="Foo")), "HTTP 500: just check")
+
+
+@wsgi_safe
 class ErrorHandlerXSRFTest(WebTestCase):
     def get_handlers(self):
         # note that if the handlers list is empty we get the default_host
