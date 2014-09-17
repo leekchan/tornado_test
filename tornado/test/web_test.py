@@ -1343,7 +1343,6 @@ class RaiseWithLogMessageTest(SimpleHandlerTestCase):
     def test_raise_with_rlog_message(self):
         response = self.fetch("/")
         self.assertEqual(response.code, 500)
-        self.assertEqual(response.log_message, "Foo")
         self.assertIn(b'500: just check', response.body)
 
     def test_httperror_str(self):
