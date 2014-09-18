@@ -1343,10 +1343,10 @@ class RaiseWithLogMessageTest(SimpleHandlerTestCase):
     def test_raise_with_rlog_message(self):
         response = self.fetch("/")
         self.assertEqual(response.code, 500)
-        self.assertIn(b'500: just check', response.body)
+        self.assertIn(b'<html><title>500: Internal Server Error</title><body>500: Internal Server Error</body></html>', response.body)
 
     def test_httperror_str(self):
-        self.assertEqual(str(HTTPError(500, log_message="Foo")), "HTTP 500: just check")
+        self.assertEqual(str(HTTPError(500, log_message="Foo")), "HTTP 500: Internal Server Error (Foo)")
 
 
 @wsgi_safe
