@@ -1332,21 +1332,9 @@ class RaiseWithReasonTest(SimpleHandlerTestCase):
 
 @wsgi_safe
 class RaiseWithLogMessageTest(SimpleHandlerTestCase):
-    class Handler(RequestHandler):
-        def get(self):
-            raise HTTPError(500, log_message="Foo")
-
-    def get_http_client(self):
-        # simple_httpclient only: curl doesn't expose the reason string
-        return SimpleAsyncHTTPClient(io_loop=self.io_loop)
-
-    def test_raise_with_rlog_message(self):
-        response = self.fetch("/")
-        self.assertEqual(response.code, 500)
-        self.assertIn(b'<html><title>500: Internal Server Error</title><body>500: Internal Server Error</body></html>', response.body)
-
     def test_httperror_str(self):
         self.assertEqual(str(HTTPError(500, log_message="Foo")), "HTTP 500: Internal Server Error (Foo)")
+        self.assertEqual(str(HTTPError(500, "reason", "error message : %s - %s", "foo", "bar")), "HTTP 500: Internal Server Error (Foo)")
 
 
 @wsgi_safe
