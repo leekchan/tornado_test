@@ -11,7 +11,7 @@ from tornado.template import DictLoader
 from tornado.testing import AsyncHTTPTestCase, ExpectLog, gen_test
 from tornado.test.util import unittest
 from tornado.util import u, ObjectDict, unicode_type
-from tornado.web import RequestHandler, authenticated, Application, asynchronous, url, HTTPError, StaticFileHandler, _create_signature_v1, create_signed_value, decode_signed_value, ErrorHandler, UIModule, MissingArgumentError, stream_request_body, Finish, removeslash, addslash, RedirectHandler as WebRedirectHandler
+from tornado.web import RequestHandler, authenticated, Application, asynchronous, url, HTTPError, StaticFileHandler, _create_signature_v1, create_signed_value, decode_signed_value, ErrorHandler, UIModule, MissingArgumentError, stream_request_body, Finish, removeslash, addslash
 
 import binascii
 import contextlib
@@ -552,6 +552,7 @@ class WSGISafeWebTest(WebTestCase):
         RequestHandler._template_loaders.clear()
 
     def get_handlers(self):
+        from tornado import web
         urls = [
             url("/typecheck/(.*)", TypeCheckHandler, name='typecheck'),
             url("/decode_arg/(.*)", DecodeArgHandler, name='decode_arg'),
@@ -561,7 +562,8 @@ class WSGISafeWebTest(WebTestCase):
             url("/optional_path/(.+)?", OptionalPathHandler),
             url("/multi_header", MultiHeaderHandler),
             url("/redirect", RedirectHandler),
-            url("/web_redirect", WebRedirectHandler),
+            url("/web_redirect_permanent", web.RedirectHandler, {"url": "/web_redirect_newpath"}),
+            url("/web_redirect", web.RedirectHandler, {"url": "/web_redirect_newpath", "permanent": False}),
             url("/header_injection", HeaderInjectionHandler),
             url("/get_argument", GetArgumentHandler),
             url("/get_arguments", GetArgumentsHandler),
@@ -688,12 +690,12 @@ js_embed()
         self.assertEqual(response.code, 307)
 
     def test_web_redirect(self):
-        response = self.fetch("/web_redirect?permanent=1", follow_redirects=False)
-        self.assertEqual(response.code, 301)
-        response = self.fetch("/web_redirect?permanent=0", follow_redirects=False)
-        self.assertEqual(response.code, 302)
-        response = self.fetch("/web_redirect?status=307", follow_redirects=False)
-        self.assertEqual(response.code, 307)
+        response = self.fetch("/web_redirect_permanent", follow_redirects=False)
+        self.assertEqual(response.code, 300)
+        self.assertEqual(response.headers['Location'], '')
+        response = self.fetch("/web_redirect")
+        self.assertEqual(response.code, 300, follow_redirects=False)
+        self.assertEqual(response.headers['Location'], '')
 
     def test_header_injection(self):
         response = self.fetch("/header_injection")
