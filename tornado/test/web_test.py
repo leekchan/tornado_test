@@ -1341,13 +1341,6 @@ class RaiseWithReasonTest(SimpleHandlerTestCase):
 
 
 @wsgi_safe
-class RaiseWithLogMessageTest(SimpleHandlerTestCase):
-    def test_httperror_str(self):
-        self.assertEqual(str(HTTPError(500, log_message="Foo")), "HTTP 500: Internal Server Error (Foo)")
-        self.assertEqual(str(HTTPError(500, "reason", "error message : %s - %s", "foo", "bar")), "HTTP 500: Internal Server Error (Foo)")
-
-
-@wsgi_safe
 class ErrorHandlerXSRFTest(WebTestCase):
     def get_handlers(self):
         # note that if the handlers list is empty we get the default_host
