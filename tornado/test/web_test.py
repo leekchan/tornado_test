@@ -692,8 +692,8 @@ js_embed()
         response = self.fetch("/web_redirect_permanent", follow_redirects=False)
         self.assertEqual(response.code, 301)
         self.assertEqual(response.headers['Location'], '/web_redirect_newpath')
-        response = self.fetch("/web_redirect")
-        self.assertEqual(response.code, 300, follow_redirects=False)
+        response = self.fetch("/web_redirect", follow_redirects=False)
+        self.assertEqual(response.code, 300)
         self.assertEqual(response.headers['Location'], '/web_redirect_newpath')
 
     def test_header_injection(self):
