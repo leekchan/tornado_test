@@ -690,7 +690,7 @@ js_embed()
 
     def test_web_redirect(self):
         response = self.fetch("/web_redirect_permanent", follow_redirects=False)
-        self.assertEqual(response.code, 300)
+        self.assertEqual(response.code, 301)
         self.assertEqual(response.headers['Location'], '')
         response = self.fetch("/web_redirect")
         self.assertEqual(response.code, 300, follow_redirects=False)
