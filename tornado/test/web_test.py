@@ -11,7 +11,7 @@ from tornado.template import DictLoader
 from tornado.testing import AsyncHTTPTestCase, ExpectLog, gen_test
 from tornado.test.util import unittest
 from tornado.util import u, ObjectDict, unicode_type
-from tornado.web import RequestHandler, authenticated, Application, asynchronous, url, HTTPError, StaticFileHandler, _create_signature_v1, create_signed_value, decode_signed_value, ErrorHandler, UIModule, MissingArgumentError, stream_request_body, Finish, removeslash, addslash
+from tornado.web import RequestHandler, authenticated, Application, asynchronous, url, HTTPError, StaticFileHandler, _create_signature_v1, create_signed_value, decode_signed_value, ErrorHandler, UIModule, MissingArgumentError, stream_request_body, Finish, removeslash, addslash, RedirectHandler as WebRedirectHandler
 
 import binascii
 import contextlib
@@ -561,6 +561,7 @@ class WSGISafeWebTest(WebTestCase):
             url("/optional_path/(.+)?", OptionalPathHandler),
             url("/multi_header", MultiHeaderHandler),
             url("/redirect", RedirectHandler),
+            url("/web_redirect", WebRedirectHandler),
             url("/header_injection", HeaderInjectionHandler),
             url("/get_argument", GetArgumentHandler),
             url("/get_arguments", GetArgumentsHandler),
@@ -684,6 +685,14 @@ js_embed()
         response = self.fetch("/redirect?permanent=0", follow_redirects=False)
         self.assertEqual(response.code, 302)
         response = self.fetch("/redirect?status=307", follow_redirects=False)
+        self.assertEqual(response.code, 307)
+
+    def test_web_redirect(self):
+        response = self.fetch("/web_redirect?permanent=1", follow_redirects=False)
+        self.assertEqual(response.code, 301)
+        response = self.fetch("/web_redirect?permanent=0", follow_redirects=False)
+        self.assertEqual(response.code, 302)
+        response = self.fetch("/web_redirect?status=307", follow_redirects=False)
         self.assertEqual(response.code, 307)
 
     def test_header_injection(self):
