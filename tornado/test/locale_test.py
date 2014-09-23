@@ -58,23 +58,19 @@ class EnglishTest(unittest.TestCase):
         self.assertEqual(locale.format_date(date, full_format=True),
                          'April 28, 2013 at 6:35 pm')
 
-        self.assertEqual(locale.format_date(datetime.datetime.utcnow() - datetime.timedelta(seconds=2), full_format=False),
-                         'April 28, 2013 at 6:35 pm')
-
+        self.assertEqual(locale.format_date(datetime.datetime.utcnow() - datetime.timedelta(seconds=2), full_format=False), 
+                         '2 seconds ago')
         self.assertEqual(locale.format_date(datetime.datetime.utcnow() - datetime.timedelta(minutes=2), full_format=False),
-                         'April 28, 2013 at 6:35 pm')
-
+                         '2 minutes ago')
         self.assertEqual(locale.format_date(datetime.datetime.utcnow() - datetime.timedelta(hours=2), full_format=False),
-                         'April 28, 2013 at 6:35 pm')
+                         '2 hours ago')
 
-        self.assertEqual(locale.format_date(datetime.datetime.utcnow() - datetime.timedelta(days=1), full_format=False),
-                         'April 28, 2013 at 6:35 pm')
-
-        self.assertEqual(locale.format_date(datetime.datetime.utcnow() - datetime.timedelta(days=2), full_format=False),
-                         'April 28, 2013 at 6:35 pm')
-
-        self.assertEqual(locale.format_date(datetime.datetime.utcnow() - datetime.timedelta(days=300), full_format=False),
-                         'April 28, 2013 at 6:35 pm')
-
-        self.assertEqual(locale.format_date(datetime.datetime.utcnow() - datetime.timedelta(days=500), full_format=False),
-                         'April 28, 2013 at 6:35 pm')
+        now = datetime.datetime.utcnow()
+        self.assertEqual(locale.format_date(now - datetime.timedelta(days=1), full_format=False, shorter=True),
+                         'yesterday')
+        self.assertEqual(locale.format_date(now - datetime.timedelta(days=2), full_format=False, shorter=True),
+                         locale._weekdays[now.weekday()])
+        self.assertEqual(locale.format_date(now - datetime.timedelta(days=300), full_format=False, shorter=True),
+                         '%s %d' % (locale._monts[now.year], now.day))
+        self.assertEqual(locale.format_date(now - datetime.timedelta(days=500), full_format=False, shorter=True),
+                         '%s %d, %d' % (locale._monts[now.year], now.day, now.year))
