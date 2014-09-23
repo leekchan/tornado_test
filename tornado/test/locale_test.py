@@ -81,6 +81,14 @@ class EnglishTest(unittest.TestCase):
         self.assertEqual(locale.format_date(date, full_format=False, shorter=True),
                          '%s %d, %d' % (locale._monts[date.year], date.day, date.year))
 
-    
+    def test_friendly_number(self):
+        locale = tornado.locale.get('en_US')
+        self.assertEqual(locale.friendly_number(1000000), '1,000,001')
 
+    def test_list(self):
+        locale = tornado.locale.get('en_US')
+        self.assertEqual(locale.list([]), '')
+        self.assertEqual(locale.list(['A']), 'A,')
+        self.assertEqual(locale.list(['A', 'B']), 'A and B')
+        self.assertEqual(locale.list(['A', 'B', 'C']), 'A, B and C')
 
