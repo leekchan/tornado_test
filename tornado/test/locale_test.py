@@ -57,3 +57,24 @@ class EnglishTest(unittest.TestCase):
         date = datetime.datetime(2013, 4, 28, 18, 35)
         self.assertEqual(locale.format_date(date, full_format=True),
                          'April 28, 2013 at 6:35 pm')
+
+        self.assertEqual(locale.format_date(datetime.datetime.utcnow() - datetime.timedelta(seconds=2), full_format=False),
+                         'April 28, 2013 at 6:35 pm')
+
+        self.assertEqual(locale.format_date(datetime.datetime.utcnow() - datetime.timedelta(minutes=2), full_format=False),
+                         'April 28, 2013 at 6:35 pm')
+
+        self.assertEqual(locale.format_date(datetime.datetime.utcnow() - datetime.timedelta(hours=2), full_format=False),
+                         'April 28, 2013 at 6:35 pm')
+
+        self.assertEqual(locale.format_date(datetime.datetime.utcnow() - datetime.timedelta(days=1), full_format=False),
+                         'April 28, 2013 at 6:35 pm')
+
+        self.assertEqual(locale.format_date(datetime.datetime.utcnow() - datetime.timedelta(days=2), full_format=False),
+                         'April 28, 2013 at 6:35 pm')
+
+        self.assertEqual(locale.format_date(datetime.datetime.utcnow() - datetime.timedelta(days=300), full_format=False),
+                         'April 28, 2013 at 6:35 pm')
+
+        self.assertEqual(locale.format_date(datetime.datetime.utcnow() - datetime.timedelta(days=500), full_format=False),
+                         'April 28, 2013 at 6:35 pm')
