@@ -68,9 +68,19 @@ class EnglishTest(unittest.TestCase):
         now = datetime.datetime.utcnow()
         self.assertEqual(locale.format_date(now - datetime.timedelta(days=1), full_format=False, shorter=True),
                          'yesterday')
-        self.assertEqual(locale.format_date(now - datetime.timedelta(days=2), full_format=False, shorter=True),
-                         locale._weekdays[now.weekday()])
-        self.assertEqual(locale.format_date(now - datetime.timedelta(days=300), full_format=False, shorter=True),
-                         '%s %d' % (locale._monts[now.year], now.day))
-        self.assertEqual(locale.format_date(now - datetime.timedelta(days=500), full_format=False, shorter=True),
-                         '%s %d, %d' % (locale._monts[now.year], now.day, now.year))
+
+        date = now - datetime.timedelta(days=2)
+        self.assertEqual(locale.format_date(date, full_format=False, shorter=True),
+                         locale._weekdays[date.weekday()])
+
+        date = now - datetime.timedelta(days=300)
+        self.assertEqual(locale.format_date(date, full_format=False, shorter=True),
+                         '%s %d' % (locale._monts[date.year], date.day))
+
+        date = now - datetime.timedelta(days=500)
+        self.assertEqual(locale.format_date(date, full_format=False, shorter=True),
+                         '%s %d, %d' % (locale._monts[date.year], date.day, date.year))
+
+    
+
+
